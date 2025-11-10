@@ -15,7 +15,7 @@ Me apasiona el diseño de arquitecturas limpias, la automatización de procesos 
 - **Frameworks:** Spring Boot, Spring Security, JPA/Hibernate
 - **Bases de datos:** MySQL, PostgreSQL
 - **Herramientas:** Maven, Git, Postman
-- **Conceptos:** REST APIs, JWT, validaciones, manejo de excepciones, capas DTO-Entity, paginación
+- **Conceptos:** REST APIs, JWT, validaciones, manejo de excepciones, MVC, paginación, entre otros.
 
 ---
 
