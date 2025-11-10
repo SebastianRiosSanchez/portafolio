@@ -17,6 +17,12 @@ Me apasiona el diseño de arquitecturas limpias, la automatización de procesos 
 - **Herramientas:** Maven, Git, Postman
 - **Conceptos:** REST APIs, JWT, validaciones, manejo de excepciones, MVC, paginación, entre otros.
 
+![Java](https://img.shields.io/badge/Java-17-orange?logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-green?logo=springboot)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?logo=mysql)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14-blue?logo=postgresql)
+
+
 ---
 
 ### 📂 Proyectos Destacados
