@@ -60,6 +60,7 @@ public class AuthService {
                 .userName(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .isDeleted(false)
+                .isEnable(true)
                 .build();
 
         // Asignar el rol
