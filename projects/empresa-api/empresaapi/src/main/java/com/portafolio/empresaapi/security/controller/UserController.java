@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -30,7 +31,6 @@ public class UserController {
      * @nameMethod getAllUsers
      * @description Method to get all users
      * @autor Sebastian rios
-     * @version 1.0
      * @date 11/11/2025
      */
     @GetMapping
@@ -41,6 +41,20 @@ public class UserController {
     ) {
         Page<UserResponseDto> users = userService.getAllUsers(firstName, userName, isEnable, pageable);
         return ResponseEntity.ok(users);
+    }
+
+    /**
+     * @param userId {{@link Long}}
+     * @return UserResponseDto
+     * @nameMethod getUserById
+     * @description Method to get a user record by their id
+     * @autor Sebastian rios
+     * @date 11/11/2025
+     */
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long userId) {
+        UserResponseDto user = userService.getUserById(userId);
+        return ResponseEntity.ok(user);
     }
 
 }
