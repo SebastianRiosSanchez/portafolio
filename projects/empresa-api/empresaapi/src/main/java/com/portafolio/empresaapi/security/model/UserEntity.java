@@ -43,6 +43,10 @@ public class UserEntity implements UserDetails {
     private Boolean isDeleted = false;
 
     @Builder.Default
+    @Column(nullable = false)
+    private Boolean isEnable = false;
+
+    @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
