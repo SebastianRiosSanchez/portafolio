@@ -21,6 +21,18 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * @param firstName {{@link String}}
+     * @param userName  {{@link String}}
+     * @param isEnable  {{@link Boolean}}
+     * @param pageable  {{@link Pageable}}
+     * @return ResponseEntity<Page<UserResponseDto>>
+     * @nameMethod getAllUsers
+     * @description Method to get all users
+     * @autor Sebastian rios
+     * @version 1.0
+     * @date 11/11/2025
+     */
     @GetMapping
     public ResponseEntity<Page<UserResponseDto>> getAllUsers(
             @RequestParam(required = false) String firstName,

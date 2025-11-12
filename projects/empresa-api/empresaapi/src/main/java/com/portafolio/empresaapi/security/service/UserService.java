@@ -21,6 +21,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * @param firstName {{@link String}}
+     * @param userName  {{@link String}}
+     * @param isEnable  {{@link Boolean}}
+     * @param pageable  {{@link Pageable}}
+     * @return Page<UserResponseDto>
+     * @nameMethod getAllUsers
+     * @description Method to get all users
+     * @autor Sebastian rios
+     * @version 1.0
+     * @date 11/11/2025
+     */
     public Page<UserResponseDto> getAllUsers(String firstName, String userName, Boolean isEnable, Pageable pageable) {
         Page<UserEntity> usersPage;
         if (StringUtils.hasText(firstName) || StringUtils.hasText(userName) || isEnable != null) {
