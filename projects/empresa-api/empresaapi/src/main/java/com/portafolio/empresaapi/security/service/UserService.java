@@ -30,7 +30,6 @@ public class UserService {
      * @nameMethod getAllUsers
      * @description Method to get all users
      * @autor Sebastian rios
-     * @version 1.0
      * @date 11/11/2025
      */
     public Page<UserResponseDto> getAllUsers(String firstName, String userName, Boolean isEnable, Pageable pageable) {
@@ -49,4 +48,21 @@ public class UserService {
                 usersPage.getTotalElements()
         );
     }
+
+    /**
+     * @param id {{@link Long}}
+     * @return UserResponseDto
+     * @nameMethod getUserById
+     * @description Method to get a user record by their id
+     * @autor Sebastian rios
+     * @date 11/11/2025
+     */
+    public UserResponseDto getUserById(Long id) {
+        UserEntity userFound = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario con id ".concat(String.valueOf(id).concat(" no encontrado"))));
+
+        return UserMapper.userEntityToUserResponseDto(userFound);
+
+    }
+
 }
