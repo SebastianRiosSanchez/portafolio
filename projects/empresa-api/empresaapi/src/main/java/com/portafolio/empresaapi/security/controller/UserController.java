@@ -1,5 +1,6 @@
 package com.portafolio.empresaapi.security.controller;
 
+import com.portafolio.empresaapi.security.dto.UserResponseDto;
 import com.portafolio.empresaapi.security.model.UserEntity;
 import com.portafolio.empresaapi.security.service.UserService;
 import org.springframework.data.domain.Page;
@@ -21,12 +22,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserEntity>> getAllUsers(
+    public ResponseEntity<Page<UserResponseDto>> getAllUsers(
             @RequestParam(required = false) String firstName,
             @RequestParam(required = false) String userName,
             @RequestParam(required = false) Boolean isEnable, Pageable pageable
     ) {
-        Page<UserEntity> users = userService.getAllUsers(firstName, userName, isEnable, pageable);
+        Page<UserResponseDto> users = userService.getAllUsers(firstName, userName, isEnable, pageable);
         return ResponseEntity.ok(users);
     }
 
