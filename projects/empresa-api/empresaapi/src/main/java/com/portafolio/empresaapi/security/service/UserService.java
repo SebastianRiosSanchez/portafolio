@@ -1,11 +1,16 @@
 package com.portafolio.empresaapi.security.service;
 
+import com.portafolio.empresaapi.security.dto.UserResponseDto;
+import com.portafolio.empresaapi.security.mapper.UserMapper;
 import com.portafolio.empresaapi.security.model.UserEntity;
 import com.portafolio.empresaapi.security.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.data.domain.PageImpl;
+
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -16,13 +21,20 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Page<UserEntity> getAllUsers(String firstName, String userName, Boolean isEnable, Pageable pageable) {
+    public Page<UserResponseDto> getAllUsers(String firstName, String userName, Boolean isEnable, Pageable pageable) {
+        Page<UserEntity> usersPage;
         if (StringUtils.hasText(firstName) || StringUtils.hasText(userName) || isEnable != null) {
-            return userRepository.findAllByFilters(firstName, userName, isEnable, pageable);
+            usersPage = userRepository.findAllByFilters(firstName, userName, isEnable, pageable);
+        } else {
+            usersPage = userRepository.findAll(pageable);
         }
 
-        return userRepository.findAll(pageable);
-
+        return new PageImpl<>(
+                usersPage.getContent().stream()
+                        .map(UserMapper::userEntityToUserResponseDto)
+                        .collect(Collectors.toList()),
+                pageable,
+                usersPage.getTotalElements()
+        );
     }
-
 }
