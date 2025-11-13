@@ -1,8 +1,11 @@
 package com.portafolio.empresaapi.security.service;
 
 import com.portafolio.empresaapi.security.dto.UserResponseDto;
+import com.portafolio.empresaapi.security.dto.UserUpdateRequestDto;
 import com.portafolio.empresaapi.security.mapper.UserMapper;
+import com.portafolio.empresaapi.security.model.RoleEntity;
 import com.portafolio.empresaapi.security.model.UserEntity;
+import com.portafolio.empresaapi.security.repository.RoleRepository;
 import com.portafolio.empresaapi.security.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,15 +13,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.data.domain.PageImpl;
 
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserRepository _userRepository, RoleRepository _roleRepository) {
+        this.userRepository = _userRepository;
+        this.roleRepository = _roleRepository;
     }
 
     /**
@@ -62,6 +69,36 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Usuario con id ".concat(String.valueOf(id).concat(" no encontrado"))));
 
         return UserMapper.userEntityToUserResponseDto(userFound);
+
+    }
+
+    public Optional<UserResponseDto> updateUser(UserUpdateRequestDto request) {
+        if (this.userRepository.findById(request.getUserId()).isEmpty()) {
+            throw new RuntimeException("El usuario con el id: ".concat(request.getUserId().toString()).concat(" no se encontro "));
+        }
+        if (validateRequest(request)) {
+            UserEntity userFound = userRepository.findById(request.getUserId()).get();
+            UserEntity updatedUser = setData(userFound, request);
+            return Optional.of(UserMapper.userEntityToUserResponseDto(userRepository.save(updatedUser)));
+        }
+        return Optional.empty();
+    }
+
+    private Boolean validateRequest(UserUpdateRequestDto request) {
+        return StringUtils.hasText(request.getFirstName()) && StringUtils.hasText(request.getLastName());
+    }
+
+    private UserEntity setData(UserEntity userFound, UserUpdateRequestDto request) {
+        userFound.setFirstname(request.getFirstName());
+        userFound.setLastname(request.getLastName());
+
+        Set<RoleEntity> newRoles = request.getRoles().stream()
+                .map(roleName -> roleRepository.findByName(roleName)
+                        .orElseThrow(() -> new RuntimeException("No existe un rol con ese nombre")))
+                .collect(Collectors.toSet());
+        userFound.setRoles(newRoles);
+
+        return userFound;
 
     }
 
