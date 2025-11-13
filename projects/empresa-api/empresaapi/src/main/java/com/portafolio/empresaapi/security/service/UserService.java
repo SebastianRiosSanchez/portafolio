@@ -57,6 +57,18 @@ public class UserService {
     }
 
     /**
+     * @param request {{@link UserUpdateRequestDto}}
+     * @return Boolean
+     * @nameMethod validateRequest
+     * @description Method to validate data request
+     * @autor Sebastian rios
+     * @date 12/11/2025
+     */
+    private Boolean validateRequest(UserUpdateRequestDto request) {
+        return StringUtils.hasText(request.getFirstName()) && StringUtils.hasText(request.getLastName());
+    }
+
+    /**
      * @param id {{@link Long}}
      * @return UserResponseDto
      * @nameMethod getUserById
@@ -72,6 +84,14 @@ public class UserService {
 
     }
 
+    /**
+     * @param request {{@link UserUpdateRequestDto}}
+     * @return Optional<UserResponseDto>
+     * @nameMethod updateUser
+     * @description Method to update a user record
+     * @autor Sebastian rios
+     * @date 12/11/2025
+     */
     public Optional<UserResponseDto> updateUser(UserUpdateRequestDto request) {
         if (this.userRepository.findById(request.getUserId()).isEmpty()) {
             throw new RuntimeException("El usuario con el id: ".concat(request.getUserId().toString()).concat(" no se encontro "));
@@ -84,10 +104,15 @@ public class UserService {
         return Optional.empty();
     }
 
-    private Boolean validateRequest(UserUpdateRequestDto request) {
-        return StringUtils.hasText(request.getFirstName()) && StringUtils.hasText(request.getLastName());
-    }
-
+    /**
+     * @param userFound {{@link UserEntity}}
+     * @param request   {{@link UserUpdateRequestDto}}
+     * @return {@link UserEntity}
+     * @nameMethod setData
+     * @description Method to set data to UserEntity record found
+     * @autor Sebastian rios
+     * @date 12/11/2025
+     */
     private UserEntity setData(UserEntity userFound, UserUpdateRequestDto request) {
         userFound.setFirstname(request.getFirstName());
         userFound.setLastname(request.getLastName());

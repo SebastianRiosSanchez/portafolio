@@ -57,6 +57,14 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    /**
+     * @param request {{@link UserUpdateRequestDto}}
+     * @return ResponseEntity<Optional<UserResponseDto>>
+     * @nameMethod updateUser
+     * @description Method to update a user record
+     * @autor Sebastian rios
+     * @date 12/11/2025
+     */
     @PutMapping()
     public ResponseEntity<Optional<UserResponseDto>> updateUser(@RequestBody UserUpdateRequestDto request) {
         Optional<UserResponseDto> user = userService.updateUser(request);
