@@ -1,7 +1,7 @@
 # 🏦 Empresa API
 
 ## 🧩 Descripción
-Microservicio REST para la gestión de empresas, programas y líneas de enfoque.  
+Microservicio REST para la gestión de registros de empresas.  
 Incluye autenticación con JWT, roles y permisos, validaciones y consultas dinámicas.
 
 ## ⚙️ Tecnologías
@@ -14,7 +14,7 @@ Incluye autenticación con JWT, roles y permisos, validaciones y consultas diná
 
 ## 🚀 Funcionalidades principales
 - Autenticación con JWT
-- CRUD de empresas, programas y líneas de enfoque
+- CRUD de registros de empresas.
 - Filtro por estado `isDeleted`
 - Control de roles (SuperAdmin, Admin, User)
 - Generación de reportes CSV
