@@ -1,16 +1,16 @@
 package com.portafolio.empresaapi.security.controller;
 
 import com.portafolio.empresaapi.security.dto.UserResponseDto;
+import com.portafolio.empresaapi.security.dto.UserUpdateRequestDto;
 import com.portafolio.empresaapi.security.model.UserEntity;
 import com.portafolio.empresaapi.security.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/users")
@@ -57,4 +57,35 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @PutMapping()
+    public ResponseEntity<Optional<UserResponseDto>> updateUser(@RequestBody UserUpdateRequestDto request) {
+        Optional<UserResponseDto> user = userService.updateUser(request);
+        return ResponseEntity.ok(user);
+
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
