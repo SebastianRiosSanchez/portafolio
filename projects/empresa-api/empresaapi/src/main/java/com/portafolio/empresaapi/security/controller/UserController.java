@@ -72,6 +72,20 @@ public class UserController {
 
     }
 
+    /**
+     * @param request {{@link UserUpdateRequestDto}}
+     * @return ResponseEntity<Optional<UserResponseDto>>
+     * @nameMethod deleteUserById
+     * @description Method to set  TRUE isDelete attribute
+     * @autor Sebastian rios
+     * @date 12/11/2025
+     */
+    @PostMapping("/delete")
+    public ResponseEntity<Optional<UserResponseDto>> deleteUserById(@RequestBody UserUpdateRequestDto request) {
+        Optional<UserResponseDto> user = userService.deleteUserById(request.getUserId());
+        return ResponseEntity.ok(user);
+    }
+
 }
 
 
