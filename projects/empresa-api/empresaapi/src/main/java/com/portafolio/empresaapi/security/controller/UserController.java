@@ -76,13 +76,27 @@ public class UserController {
      * @param request {{@link UserUpdateRequestDto}}
      * @return ResponseEntity<Optional<UserResponseDto>>
      * @nameMethod deleteUserById
-     * @description Method to set  TRUE isDelete attribute
+     * @description Method to set TRUE isDelete attribute
      * @autor Sebastian rios
      * @date 12/11/2025
      */
     @PostMapping("/delete")
     public ResponseEntity<Optional<UserResponseDto>> deleteUserById(@RequestBody UserUpdateRequestDto request) {
         Optional<UserResponseDto> user = userService.deleteUserById(request.getUserId());
+        return ResponseEntity.ok(user);
+    }
+
+    /**
+     * @param request {{@link UserUpdateRequestDto}}
+     * @return ResponseEntity<Optional<UserResponseDto>>
+     * @nameMethod activateUser
+     * @description Method to set TRUE isEnable attribute
+     * @autor Sebastian rios
+     * @date 12/11/2025
+     */
+    @PostMapping("/activate")
+    public ResponseEntity<Optional<UserResponseDto>> activateUser(@RequestBody UserUpdateRequestDto request) {
+        Optional<UserResponseDto> user = userService.activateUser(request.getUserId());
         return ResponseEntity.ok(user);
     }
 
