@@ -129,9 +129,9 @@ public class UserService {
 
     /**
      * @param userId {{@link Long}}
-     * @return {@link UserEntity}
-     * @nameMethod Optional<UserResponseDto>
-     * @description Method to set  TRUE isDelete attribute
+     * @return {@link Optional<UserResponseDto>}
+     * @nameMethod deleteUserById
+     * @description Method to set TRUE isDelete attribute
      * @autor Sebastian rios
      * @date 12/11/2025
      */
@@ -142,6 +142,29 @@ public class UserService {
         Optional<UserEntity> foundUser = userRepository.findById(userId);
         foundUser.ifPresent(user -> {
             user.setIsDeleted(Boolean.TRUE);
+            user.setIsEnable(Boolean.FALSE);
+        });
+        userRepository.save(foundUser.get());
+        return foundUser.map(UserMapper::userEntityToUserResponseDto);
+    }
+
+    /**
+     * @param userId {{@link Long}}
+     * @return {@link Optional<UserResponseDto>}
+     * @nameMethod activateUser
+     * @description Method to set TRUE isEnable attribute
+     * @autor Sebastian rios
+     * @date 12/11/2025
+     */
+    public Optional<UserResponseDto> activateUser(Long userId) {
+        if (this.userRepository.findById(userId).isEmpty()) {
+            throw new RuntimeException("No se ha encontrado un usuario con id: .".concat(userId.toString()));
+        }
+        Optional<UserEntity> foundUser = userRepository.findById(userId);
+        if (foundUser.get().getIsDeleted().equals(Boolean.TRUE)) {
+            throw new RuntimeException("El usuario con el id: ".concat(userId.toString()).concat("ha sido eliminado"));
+        }
+        foundUser.ifPresent(user -> {
             user.setIsEnable(Boolean.FALSE);
         });
         userRepository.save(foundUser.get());
