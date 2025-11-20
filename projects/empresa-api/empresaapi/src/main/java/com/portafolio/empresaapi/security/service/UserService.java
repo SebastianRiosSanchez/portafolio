@@ -1,5 +1,8 @@
 package com.portafolio.empresaapi.security.service;
 
+import com.portafolio.empresaapi.exception.InvalidRequestException;
+import com.portafolio.empresaapi.exception.RoleNotFoundException;
+import com.portafolio.empresaapi.exception.UserNotFoundException;
 import com.portafolio.empresaapi.security.dto.UserResponseDto;
 import com.portafolio.empresaapi.security.dto.UserUpdateRequestDto;
 import com.portafolio.empresaapi.security.mapper.UserMapper;
@@ -78,7 +81,7 @@ public class UserService {
      */
     public UserResponseDto getUserById(Long id) {
         UserEntity userFound = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario con id ".concat(String.valueOf(id).concat(" no encontrado"))));
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         return UserMapper.userEntityToUserResponseDto(userFound);
 
@@ -93,15 +96,14 @@ public class UserService {
      * @date 12/11/2025
      */
     public Optional<UserResponseDto> updateUser(UserUpdateRequestDto request) {
-        if (this.userRepository.findById(request.getUserId()).isEmpty()) {
-            throw new RuntimeException("El usuario con el id: ".concat(request.getUserId().toString()).concat(" no se encontro "));
+        UserEntity foundUser = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
+        if (!validateRequest(request)) {
+            throw new InvalidRequestException("Los datos ingresados no son validos");
         }
-        if (validateRequest(request)) {
-            UserEntity userFound = userRepository.findById(request.getUserId()).get();
-            UserEntity updatedUser = setData(userFound, request);
-            return Optional.of(UserMapper.userEntityToUserResponseDto(userRepository.save(updatedUser)));
-        }
-        return Optional.empty();
+        UserEntity updatedUser = setData(foundUser, request);
+        return Optional.of(UserMapper.userEntityToUserResponseDto(updatedUser));
+
     }
 
     /**
@@ -119,7 +121,7 @@ public class UserService {
 
         Set<RoleEntity> newRoles = request.getRoles().stream()
                 .map(roleName -> roleRepository.findByName(roleName)
-                        .orElseThrow(() -> new RuntimeException("No existe un rol con ese nombre")))
+                        .orElseThrow(() -> new RoleNotFoundException(roleName)))
                 .collect(Collectors.toSet());
         userFound.setRoles(newRoles);
 
