@@ -1,5 +1,7 @@
 package com.portafolio.empresaapi.security.service;
 
+import com.portafolio.empresaapi.exception.InvalidRequestException;
+import com.portafolio.empresaapi.exception.RoleNotFoundException;
 import com.portafolio.empresaapi.security.auth.AuthenticationRequest;
 import com.portafolio.empresaapi.security.auth.AuthenticationResponse;
 import com.portafolio.empresaapi.security.auth.RegisterRequest;
@@ -45,15 +47,12 @@ public class AuthService {
      * Registrar un nuevo usuario en el sistema.
      */
     public AuthenticationResponse register(RegisterRequest request) {
-        // Verificar si el usuario ya existe
         if (userRepository.findByUserName(request.getEmail()).isPresent()) {
-            throw new RuntimeException("El usuario con el correo ".concat(request.getEmail()).concat(" ya existe"));
+            throw new InvalidRequestException("El usuario con el correo ".concat(request.getEmail()).concat(" ya existe"));
         }
-        // Asignar rol por defecto (ej. USER)
         RoleEntity defaultRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new RuntimeException("El rol ingresado no existe"));
+                .orElseThrow(() -> new RoleNotFoundException("El rol ingresado no se encuentra en la base de datos."));
 
-        // Construir entidad del usuario
         UserEntity user = UserEntity.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -63,11 +62,9 @@ public class AuthService {
                 .isEnable(true)
                 .build();
 
-        // Asignar el rol
         user.getRoles().add(defaultRole);
-        // Guardar datos del usuario
         userRepository.save(user);
-        // Generar el token JWT
+
         String token = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder()
