@@ -12,6 +12,7 @@ import com.portafolio.empresaapi.security.repository.RoleRepository;
 import com.portafolio.empresaapi.security.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.data.domain.PageImpl;
@@ -95,6 +96,7 @@ public class UserService {
      * @autor Sebastian rios
      * @date 12/11/2025
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public Optional<UserResponseDto> updateUser(UserUpdateRequestDto request) {
         UserEntity foundUser = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
@@ -171,6 +173,32 @@ public class UserService {
         });
         userRepository.save(foundUser.get());
         return foundUser.map(UserMapper::userEntityToUserResponseDto);
+    }
+
+    /**
+     * @param userId    {{@link Long}}
+     * @param roleNames {{@link Set<String>}}
+     * @return {@link Optional<UserResponseDto>}
+     * @nameMethod updateUserRolesByAdmin
+     * @description Method to update a user roles
+     * @autor Sebastian rios
+     * @date 20/11/2025
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponseDto updateUserRolesByAdmin(Long userId, Set<String> roleNames) {
+        UserEntity foundUser = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("El usuario con el id: " + userId + " No se encuentra en la base de datos."));
+
+        Set<RoleEntity> newRoles = roleNames.stream()
+                .map(roleName -> roleRepository.findByName(roleName)
+                        .orElseThrow(() -> new RoleNotFoundException(roleName)))
+                .collect(Collectors.toSet());
+
+        foundUser.setRoles(newRoles);
+
+        userRepository.save(foundUser);
+        return UserMapper.userEntityToUserResponseDto(foundUser);
+
     }
 
 }
