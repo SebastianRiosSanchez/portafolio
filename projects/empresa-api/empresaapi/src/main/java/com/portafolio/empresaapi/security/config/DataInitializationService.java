@@ -26,6 +26,7 @@ public class DataInitializationService {
         // ✅ Crear roles si no existen
         RoleEntity userRole = createRoleIfNotExist("USER", "Default user role");
         RoleEntity adminRole = createRoleIfNotExist("ADMIN", "Administrator role");
+        RoleEntity managerRole = createRoleIfNotExist("MANAGER", "Manager role");
 
         // ✅ Crear usuario superadmin si no existe
         userRepository.findByUserName("superadmin").orElseGet(() -> {
