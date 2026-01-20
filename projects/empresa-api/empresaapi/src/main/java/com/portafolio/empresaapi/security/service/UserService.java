@@ -169,7 +169,7 @@ public class UserService {
             throw new RuntimeException("El usuario con el id: ".concat(userId.toString()).concat("ha sido eliminado"));
         }
         foundUser.ifPresent(user -> {
-            user.setIsEnable(Boolean.FALSE);
+            user.setIsEnable(Boolean.TRUE);
         });
         userRepository.save(foundUser.get());
         return foundUser.map(UserMapper::userEntityToUserResponseDto);
